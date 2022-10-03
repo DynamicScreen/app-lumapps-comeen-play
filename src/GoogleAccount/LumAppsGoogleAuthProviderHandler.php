@@ -48,7 +48,6 @@ class LumAppsGoogleAuthProviderHandler extends LumAppsBaseAuthProviderHandler
     }
 
     public function callback($request, $redirectUrl = null) {
-        $state = Session::get($request->input('state'));
         // $account = $this->extractAccount($state['account_id']);
         // $space_name = $state['space_name'];
         $code = $request->input('code');
@@ -111,7 +110,7 @@ class LumAppsGoogleAuthProviderHandler extends LumAppsBaseAuthProviderHandler
     {
         return [
             'rules' => [
-                'endpoint_uri' => ['required']
+                'endpoint_uri' => ['required'],
             ],
             'messages' => [
                 // 'url.required' => ""

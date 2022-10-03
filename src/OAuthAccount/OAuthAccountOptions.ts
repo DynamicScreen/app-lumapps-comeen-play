@@ -3,7 +3,7 @@ import {
   SlideOptionsModule, VueInstance
 } from "@comeen/comeen-play-sdk-js";
 
-export default class GoogleAccountOptionsModule extends SlideOptionsModule {
+export default class OAuthAccountOptionsModule extends SlideOptionsModule {
   constructor(context: ISlideOptionsContext) {
     super(context);
   }
@@ -23,6 +23,18 @@ export default class GoogleAccountOptionsModule extends SlideOptionsModule {
       h("div", {}, [
         h(Field, { label: 'LumApps API endpoint' },
           h(TextInput, { ...update.option('endpoint_uri'), placeholder: 'https://' })
+        ),
+        h(Field, { label: 'Host' },
+          h(TextInput, { ...update.option('host'), placeholder: '' })
+        ),
+        h(Field, { label: 'Organization ID' },
+          h(TextInput, { ...update.option('organization_id'), placeholder: '' })
+        ),
+        h(Field, { label: 'Client ID' },
+          h(TextInput, { ...update.option('client_id'), placeholder: '' })
+        ),
+        h(Field, { label: 'Client Secret' },
+          h(TextInput, { ...update.option('client_secret'), placeholder: '' })
         )
       ]
     )

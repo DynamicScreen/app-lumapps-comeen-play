@@ -32,17 +32,17 @@ modules:
             node:
                 handler: src/handler.js
 
-    -   name: modules.lumapps.datasource
+    -   name: modules.lumapps-microsoft-account.name
         logo: fak fa-comeen
-        description: modules.lumapps-google-account.description
-        identifier: lumapps-posts-datasource
+        description: modules.lumapps-microsoft-account.description
+        identifier: lumapps-microsoft-account
         color: blue
-        type: datasource
+        type: auth-provider
         options:
-            provider: lumapps-google
+            provider: lumapps-oauth
             vue:
-                options: src/GoogleAccount/GoogleAccountOptions.ts
+                options: src/OAuthAccount/OAuthAccountOptions.ts
             php:
-                handler: \ComeenPlay\LumApps\GoogleAccount\LumAppsGoogleAuthProviderHandler
+                handler: \ComeenPlay\LumApps\OAuthAccount\LumAppsOAuthAuthProviderHandler
             node:
                 handler: src/handler.js
