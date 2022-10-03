@@ -1,0 +1,14 @@
+{
+    "app": {
+        "name": "App name",
+        "description": "App description"
+    },
+    "modules": {
+        "posts": {
+            "name": "Module name",
+            "description": "Module description",
+            "options": {
+            }
+        }
+    }
+}

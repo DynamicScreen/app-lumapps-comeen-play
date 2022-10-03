@@ -1,0 +1,48 @@
+# YAML
+id: app-lumapps-comeen-play
+name: app.name
+description: app.description
+logo: fa fa-image
+version: 0.2.0
+channel: stable
+api-level: 1
+color: red
+category: workplace
+author:
+    name: Comeen
+    email: support@comeen.com
+privileges:
+    needs_account:
+        -   identifier: lumapps-google-account
+            type: lumapps-google
+            why: privileges.needs_account.google.why
+modules:
+    -   name: modules.lumapps-google-account.name
+        logo: fak fa-comeen
+        description: modules.lumapps-google-account.description
+        identifier: lumapps-google-account
+        color: blue
+        type: auth-provider
+        options:
+            provider: lumapps-google
+            vue:
+                options: src/GoogleAccount/GoogleAccountOptions.ts
+            php:
+                handler: \ComeenPlay\LumApps\GoogleAccount\LumAppsGoogleAuthProviderHandler
+            node:
+                handler: src/handler.js
+
+    -   name: modules.lumapps.datasource
+        logo: fak fa-comeen
+        description: modules.lumapps-google-account.description
+        identifier: lumapps-posts-datasource
+        color: blue
+        type: datasource
+        options:
+            provider: lumapps-google
+            vue:
+                options: src/GoogleAccount/GoogleAccountOptions.ts
+            php:
+                handler: \ComeenPlay\LumApps\GoogleAccount\LumAppsGoogleAuthProviderHandler
+            node:
+                handler: src/handler.js
