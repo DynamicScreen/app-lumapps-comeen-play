@@ -1,13 +1,25 @@
 {
     "app": {
-        "name": "App name",
-        "description": "App description"
+        "name": "LumApps",
+        "description": "Broadcast your LumApps news"
     },
     "modules": {
-        "posts": {
-            "name": "Module name",
-            "description": "Module description",
+        "lumapps-google-account": {
+            "name": "LumApps for Google Workspace",
+            "description": "Connect your Google account",
             "options": {
+                "endpoint_uri": "API endpoint"
+            }
+        },
+        "lumapps-microsoft-account": {
+            "name": "LumApps for Microsoft 365",
+            "description": "Connect your Microsoft 365 account",
+            "options": {
+                "intranet_url": "API endpoint",
+                "host": "Host",
+                "organization_id": "Organization ID",
+                "client_id": "Client ID",
+                "client_secret": "Client secret"
             }
         }
     }

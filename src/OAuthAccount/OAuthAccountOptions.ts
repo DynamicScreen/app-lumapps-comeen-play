@@ -21,19 +21,19 @@ export default class OAuthAccountOptionsModule extends SlideOptionsModule {
 
     return () =>
       h("div", {}, [
-        h(Field, { label: 'LumApps API endpoint' },
+        h(Field, { label: this.t("modules.lumapps-microsoft-account.options.endpoint_uri") },
           h(TextInput, { ...update.option('endpoint_uri'), placeholder: 'https://' })
         ),
-        h(Field, { label: 'Host' },
+        h(Field, { label: this.t("modules.lumapps-microsoft-account.options.host") },
           h(TextInput, { ...update.option('host'), placeholder: '' })
         ),
-        h(Field, { label: 'Organization ID' },
+        h(Field, { label: this.t("modules.lumapps-microsoft-account.options.organization_id") },
           h(TextInput, { ...update.option('organization_id'), placeholder: '' })
         ),
-        h(Field, { label: 'Client ID' },
+        h(Field, { label: this.t("modules.lumapps-microsoft-account.options.client_id") },
           h(TextInput, { ...update.option('client_id'), placeholder: '' })
         ),
-        h(Field, { label: 'Client Secret' },
+        h(Field, { label: this.t("modules.lumapps-microsoft-account.options.client_secret") },
           h(TextInput, { ...update.option('client_secret'), placeholder: '' })
         )
       ]

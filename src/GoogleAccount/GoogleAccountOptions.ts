@@ -21,7 +21,7 @@ export default class GoogleAccountOptionsModule extends SlideOptionsModule {
 
     return () =>
       h("div", {}, [
-        h(Field, { label: 'LumApps API endpoint' },
+        h(Field, { label: this.t("modules.lumapps-google-account.options.endpoint_uri") },
           h(TextInput, { ...update.option('endpoint_uri'), placeholder: 'https://' })
         )
       ]
