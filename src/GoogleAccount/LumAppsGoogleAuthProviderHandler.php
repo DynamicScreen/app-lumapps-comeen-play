@@ -73,6 +73,8 @@ class LumAppsGoogleAuthProviderHandler extends LumAppsBaseAuthProviderHandler
 
         $client->setRedirectUri(Str::replace('http:', 'https:', route('api.oauth.callback')));
 
+        $this->refreshToken($client);
+
         if (isset($account) && Arr::get($account, 'options.access_token')) {
             $client->setAccessToken(Arr::get($account, 'options'));
 
@@ -116,5 +118,37 @@ class LumAppsGoogleAuthProviderHandler extends LumAppsBaseAuthProviderHandler
                 // 'url.required' => ""
             ],
         ];
+    }
+
+    public function refreshToken($client = null)
+    {
+        if (!Arr::get($this->default_config, 'access_token')) {
+            return [];
+        }
+        if(!$client) {
+            $client = $this->getClient();
+        }
+
+        try {
+            $client->setAccessToken($this->default_config);
+        } catch (\InvalidArgumentException $exception) {
+            return [];
+        }
+
+        if ($client->isAccessTokenExpired()) {
+            $refresh_token = $client->getRefreshToken();
+
+            $new_access = $client->fetchAccessTokenWithRefreshToken($refresh_token);
+            $options = $this->processOptions($new_access);
+
+            // Google failed to provide token: auth failed
+            if (!$new_access || !isset($new_access['access_token'])) {
+                return;
+            }
+
+            $client->setAccessToken($new_access);
+        }
+
+        return $client->getAccessToken();
     }
 }
