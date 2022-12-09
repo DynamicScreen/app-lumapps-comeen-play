@@ -22,6 +22,8 @@ use ComeenPlay\SdkPhp\Interfaces\IModule;
 
 abstract class LumAppsBaseAuthProviderHandler extends OAuthProviderHandler
 {
+    protected $MAX_RETRIES = 3;
+
     public function __construct(IModule $module, $config = null)
     {
         parent::__construct($module, $config);
@@ -110,13 +112,13 @@ abstract class LumAppsBaseAuthProviderHandler extends OAuthProviderHandler
         }
     }
 
-    public function get($uri, $query_params, $config = null)
+    public function get($uri, $query_params, $account = null, $retry = 0)
     {
-        $access_token = $this->getAccessToken($config);
+        $access_token = $this->getAccessToken($account);
 
         $client = new Client();
         try {
-            $response = $client->request('GET', $this->endpoint_uri(Arr::get($config, 'options')) . Str::start($uri, '/'), [
+            $response = $client->request('GET', $this->endpoint_uri(Arr::get($account, 'options')) . Str::start($uri, '/'), [
                 'query' => $query_params,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -125,19 +127,23 @@ abstract class LumAppsBaseAuthProviderHandler extends OAuthProviderHandler
                 ],
             ]);
         } catch (Exception $ex) {
+            if ($retry < $this->MAX_RETRIES) {
+                return $this->get($uri, $query_params, $account, $retry+1);
+            }
+
             return [];
         }
 
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function post($uri, $query_params, $config = null)
+    public function post($uri, $query_params, $account = null, $retry = 0)
     {
-        $access_token = $this->getAccessToken($config);
+        $access_token = $this->getAccessToken($account);
 
         $client = new Client();
         try {
-            $response = $client->request('POST', $this->endpoint_uri(Arr::get($config, 'options')) . Str::start($uri, '/'), [
+            $response = $client->request('POST', $this->endpoint_uri(Arr::get($account, 'options')) . Str::start($uri, '/'), [
                 'query' => $query_params,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -147,6 +153,11 @@ abstract class LumAppsBaseAuthProviderHandler extends OAuthProviderHandler
             ]);
         } catch (Exception $ex) {
             dump($ex);
+
+            if ($retry < $this->MAX_RETRIES) {
+                return $this->post($uri, $query_params, $account, $retry+1);
+            }
+
             return [];
         }
 

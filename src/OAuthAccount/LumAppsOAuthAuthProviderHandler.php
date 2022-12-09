@@ -72,7 +72,7 @@ class LumAppsOAuthAuthProviderHandler extends LumAppsBaseAuthProviderHandler
     public function callback($request, $redirectUrl = null) {
         $tmp_uuid = $request->input('state');
         $options = Session::get($tmp_uuid, []);
-        $options = $this->requestAccessToken($options);
+        $options = $this->requestAccessToken($options, true);
 
         return redirect()->away($redirectUrl . "&data=" . json_encode($options));
     }
@@ -101,7 +101,7 @@ class LumAppsOAuthAuthProviderHandler extends LumAppsBaseAuthProviderHandler
     //     throw new HttpResponseException(redirect(route('manager.settings.accounts.edit', ['_spacename' => $account->space->name, 'account' => $account]))->with('error', __('settings/accounts.lumapps_oauth_options.error')));
     // }
 
-    private function requestAccessToken($options) {
+    private function requestAccessToken($options, $returnFullOptions = false) {
         if (!$options) {
             return null;
         }
@@ -112,7 +112,7 @@ class LumAppsOAuthAuthProviderHandler extends LumAppsBaseAuthProviderHandler
 
         // Avoid recalling access_token request
         if ($access_token_data) {
-            if (!Carbon::now()->greaterThan(Carbon::createFromTimestamp($access_token_data['expires_in']))) {
+            if (!Carbon::now()->greaterThan(Carbon::createFromTimestamp($access_token_data['expires_in'] - 60*15))) {
                 return $access_token_data;
             }
         }
@@ -152,15 +152,27 @@ class LumAppsOAuthAuthProviderHandler extends LumAppsBaseAuthProviderHandler
                 $options->put("access_token_data", $access_token_data);
                 $options->put("update_options", true);
 
-                return $options;
+                if ($returnFullOptions) {
+                    return $options;
+                } else {
+                    return $access_token_data;
+                }
             }
 
-            return $options;
+            if ($returnFullOptions) {
+                return $options;
+            } else {
+                return $access_token_data;
+            }
         } catch (\Exception $e) {
             // activity('debug')->withProperties(['error' => $e->getMessage()])
             //     ->log('Error on Lumapps OAuth access token request');
 
-            return null;
+            if ($returnFullOptions) {
+                return $options;
+            } else {
+                return $access_token_data;
+            }
         }
     }
 
